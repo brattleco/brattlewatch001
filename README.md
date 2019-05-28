@@ -12,7 +12,7 @@ Config Debounce = 30
 Config Clock = Soft
 
 Enable Interrupts
-Time$ = "01:00:00"
+Time$ = "12:59:50"
 
 
 Config Portb = Output
@@ -54,11 +54,11 @@ Declare Sub Panjkam
 Declare Sub Sefr
 '-----------------------------
 Dim Flag1 As Boolean
-
+Dim Flagmin As Boolean
+'------------------------------------------------------
 Flag1 = 0
+Flagmin = 0
 Do
-
-
 '-------------------- hours -----------------
 If _hour = 13 Then
 _hour = 01
@@ -112,8 +112,25 @@ If _hour = 11 Then
 Call Yazdah
 End If
 '-------------------------------
+
+If _min = 01 Then
+   If Flagmin = 1 Then
+      _min = 00
+      Flagmin = 0
+   End If
+End If
+
+If _min = 59 Then
+   If _sec > 58 Then
+      _min = 00
+      Call Sefr
+   End If
+
+End If
+
 If _min = 05 Then
 Call Vapanjdaghighe
+Flagmin = 1
 End If
 
 If _min = 10 Then
@@ -160,15 +177,6 @@ End If
 
 If _min = 55 Then
 Call Panjkam
-End If
-
-If _min = 59 Then
-   If _sec > 58 Then
-   'Decr _hour
-      _min = 00
-      Call Sefr
-   End If
-
 End If
 
 If Pina.6 = 1 Then
@@ -527,6 +535,4 @@ Reset Porta.3
 Reset Porta.4
 Reset Porta.5
 End Sub
-
-
 
