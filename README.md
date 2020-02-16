@@ -1,7 +1,7 @@
 $regfile = "m32def.dat"
 $crystal = 8000000
 '-----------------------------------
-'Config Lcdpin = Pin , Db7 = Porta.0 , Db6 = Porta.1 , Db5 = Porta.2 , Db4 = Porta.3 , E = Porta.4 , Rs = Porta.5
+'Config Lcdpin = Pin , Db7 = portc.0 , Db6 = portc.1 , Db5 = portc.2 , Db4 = portc.3 , E = portc.4 , Rs = portc.5
 'Config Lcd = 16 * 2
 'Cursor Off
 'Lcd "Time Setting:"
@@ -12,20 +12,17 @@ Config Debounce = 30
 Config Clock = Soft
 
 Enable Interrupts
-Time$ = "12:59:50"
+Time$ = "12:35:00"
 
 
 Config Portb = Output
 Config Portd = Output
-Config Portc.0 = Output
+
+Config Portc = Output
+
 Config Pina.6 = Input
 Config Pina.7 = Input
-Config Porta.0 = Output
-Config Porta.1 = Output
-Config Porta.2 = Output
-Config Porta.3 = Output
-Config Porta.4 = Output
-Config Porta.5 = Output
+
 '-----------------------------
 Declare Sub Davazdah
 Declare Sub Yek
@@ -54,10 +51,14 @@ Declare Sub Panjkam
 Declare Sub Sefr
 '-----------------------------
 Dim Flag1 As Boolean
+'-------------------------------------------------------
 Dim Flagmin As Boolean
+Dim Flagsaniye As Boolean
+
 '------------------------------------------------------
 Flag1 = 0
 Flagmin = 0
+Flagsaniye = 0
 Do
 '-------------------- hours -----------------
 If _hour = 13 Then
@@ -121,16 +122,24 @@ If _min = 01 Then
 End If
 
 If _min = 59 Then
-   If _sec > 58 Then
+   If _sec = 59 Then
+      If Flagsaniye = 1 Then
+      _sec = 58
+      Flagsaniye = 0
+      End If
+
+   End If
+
+   'Decr _hour
       _min = 00
       Call Sefr
    End If
 
-End If
 
 If _min = 05 Then
 Call Vapanjdaghighe
 Flagmin = 1
+Flagsaniye = 1
 End If
 
 If _min = 10 Then
@@ -385,12 +394,12 @@ Set Portd.4
 Reset Portd.5
 Reset Portd.6
 Reset Portd.7
-Reset Porta.0
-Reset Porta.1
-Reset Porta.2
-Set Porta.3
-Set Porta.4
-Reset Porta.5
+Reset portc.0
+Reset portc.1
+Reset portc.2
+Set portc.3
+Set portc.4
+Reset portc.5
 End Sub
 
 Sub Vadahdaghighe
@@ -398,12 +407,12 @@ Set Portd.4
 Set Portd.5
 Reset Portd.6
 Reset Portd.7
-Reset Porta.0
-Reset Porta.1
-Reset Porta.2
-Set Porta.3
-Reset Porta.4
-Reset Porta.5
+Reset portc.0
+Reset portc.1
+Reset portc.2
+Set portc.3
+Reset portc.4
+Reset portc.5
 End Sub
 
 Sub Varob
@@ -411,12 +420,12 @@ Set Portd.4
 Reset Portd.5
 Set Portd.6
 Reset Portd.7
-Reset Porta.0
-Reset Porta.1
-Reset Porta.2
-Reset Porta.3
-Reset Porta.4
-Reset Porta.5
+Reset portc.0
+Reset portc.1
+Reset portc.2
+Reset portc.3
+Reset portc.4
+Reset portc.5
 End Sub
 
 Sub Vabistdaghighe
@@ -424,12 +433,12 @@ Set Portd.4
 Reset Portd.5
 Reset Portd.6
 Set Portd.7
-Reset Porta.0
-Reset Porta.1
-Reset Porta.2
-Set Porta.3
-Reset Porta.4
-Reset Porta.5
+Reset portc.0
+Reset portc.1
+Reset portc.2
+Set portc.3
+Reset portc.4
+Reset portc.5
 End Sub
 
 Sub Vabistopanjdaghighe
@@ -437,12 +446,12 @@ Set Portd.4
 Reset Portd.5
 Reset Portd.6
 Set Portd.7
-Reset Porta.0
-Reset Porta.1
-Reset Porta.2
-Set Porta.3
-Set Porta.4
-Set Porta.5
+Reset portc.0
+Reset portc.1
+Reset portc.2
+Set portc.3
+Set portc.4
+Set portc.5
 End Sub
 
 Sub Vanim
@@ -450,12 +459,12 @@ Set Portd.4
 Reset Portd.5
 Reset Portd.6
 Reset Portd.7
-Reset Porta.0
-Set Porta.1
-Reset Porta.2
-Reset Porta.3
-Reset Porta.4
-Reset Porta.5
+Reset portc.0
+Set portc.1
+Reset portc.2
+Reset portc.3
+Reset portc.4
+Reset portc.5
 End Sub
 
 Sub Vasiopanjdaghighe
@@ -463,12 +472,12 @@ Set Portd.4
 Reset Portd.5
 Reset Portd.6
 Reset Portd.7
-Set Porta.0
-Reset Porta.1
-Reset Porta.2
-Set Porta.3
-Set Porta.4
-Set Porta.5
+Set portc.0
+Reset portc.1
+Reset portc.2
+Set portc.3
+Set portc.4
+Set portc.5
 End Sub
 
 Sub Bistkam
@@ -476,12 +485,12 @@ Reset Portd.4
 Reset Portd.5
 Reset Portd.6
 Set Portd.7
-Reset Porta.0
-Reset Porta.1
-Set Porta.2
-Reset Porta.3
-Reset Porta.4
-Reset Porta.5
+Reset portc.0
+Reset portc.1
+Set portc.2
+Reset portc.3
+Reset portc.4
+Reset portc.5
 End Sub
 
 Sub Robkam
@@ -489,12 +498,12 @@ Reset Portd.4
 Reset Portd.5
 Set Portd.6
 Reset Portd.7
-Reset Porta.0
-Reset Porta.1
-Set Porta.2
-Reset Porta.3
-Reset Porta.4
-Reset Porta.5
+Reset portc.0
+Reset portc.1
+Set portc.2
+Reset portc.3
+Reset portc.4
+Reset portc.5
 End Sub
 
 Sub Dahkam
@@ -502,12 +511,12 @@ Reset Portd.4
 Set Portd.5
 Reset Portd.6
 Reset Portd.7
-Reset Porta.0
-Reset Porta.1
-Set Porta.2
-Reset Porta.3
-Reset Porta.4
-Reset Porta.5
+Reset portc.0
+Reset portc.1
+Set portc.2
+Reset portc.3
+Reset portc.4
+Reset portc.5
 End Sub
 
 Sub Panjkam
@@ -515,12 +524,12 @@ Reset Portd.4
 Reset Portd.5
 Reset Portd.6
 Reset Portd.7
-Reset Porta.0
-Reset Porta.1
-Set Porta.2
-Reset Porta.3
-Set Porta.4
-Reset Porta.5
+Reset portc.0
+Reset portc.1
+Set portc.2
+Reset portc.3
+Set portc.4
+Reset portc.5
 End Sub
 
 Sub Sefr
@@ -528,11 +537,10 @@ Reset Portd.4
 Reset Portd.5
 Reset Portd.6
 Reset Portd.7
-Reset Porta.0
-Reset Porta.1
-Reset Porta.2
-Reset Porta.3
-Reset Porta.4
-Reset Porta.5
+Reset portc.0
+Reset portc.1
+Reset portc.2
+Reset portc.3
+Reset portc.4
+Reset portc.5
 End Sub
-
